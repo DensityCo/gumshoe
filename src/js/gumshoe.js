@@ -17,12 +17,13 @@
 	var gumshoe = {}; // Object for public APIs
 	var supports = 'querySelector' in document && 'addEventListener' in root && 'classList' in document.createElement('_'); // Feature test
 	var navs = []; // Array for nav elements
-	var settings, eventTimeout, docHeight, header, headerHeight, currentNav;
+	var settings, eventTimeout, docHeight, content, header, headerHeight, currentNav;
 
 	// Default settings
 	var defaults = {
 		selector: '[data-gumshoe] a',
 		selectorHeader: '[data-gumshoe-header]',
+		selectorContent: 'body',
 		offset: 0,
 		activeClass: 'active',
 		callback: function () {}
@@ -118,9 +119,9 @@
 	 */
 	var getDocumentHeight = function () {
 		return Math.max(
-			document.body.scrollHeight, document.documentElement.scrollHeight,
-			document.body.offsetHeight, document.documentElement.offsetHeight,
-			document.body.clientHeight, document.documentElement.clientHeight
+			content.scrollHeight,
+			content.offsetHeight,
+			content.clientHeight
 		);
 	};
 
@@ -265,10 +266,10 @@
 	gumshoe.getCurrentNav = function () {
 
 		// Get current position from top of the document
-		var position = root.pageYOffset;
+		var position = content.scrollTop;
 
 		// If at the bottom of the page and last section is in the viewport, activate the last nav
-		if ( (root.innerHeight + position) >= docHeight && isInViewport( navs[0].target ) ) {
+		if ( (content.innerHeight + position) >= docHeight && isInViewport( navs[0].target ) ) {
 			activateNav( navs[0] );
 			return navs[0];
 		}
@@ -313,8 +314,8 @@
 		if ( !settings ) return;
 
 		// Remove event listeners
-		root.removeEventListener('resize', eventThrottler, false);
-		root.removeEventListener('scroll', eventThrottler, false);
+		content.removeEventListener('resize', eventThrottler, false);
+		content.removeEventListener('scroll', eventThrottler, false);
 
 		// Reset variables
 		navs = [];
@@ -369,6 +370,7 @@
 
 		// Set variables
 		settings = extend( defaults, options || {} ); // Merge user options with defaults
+		content = document.querySelector( settings.selectorContent ); // Get content element
 		header = document.querySelector( settings.selectorHeader ); // Get fixed header
 		getNavs(); // Get navigation elements
 
@@ -381,8 +383,8 @@
 		gumshoe.getCurrentNav();
 
 		// Listen for events
-		root.addEventListener('resize', eventThrottler, false);
-		root.addEventListener('scroll', eventThrottler, false);
+		content.addEventListener('resize', eventThrottler, false);
+		content.addEventListener('scroll', eventThrottler, false);
 
 	};
 
