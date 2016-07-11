@@ -115,7 +115,7 @@
 	 * @param  {Node} elem The element to get the height of
 	 * @return {Number}    The element's height in pixels
 	 */
-	var getHeight = function ( elem ) {
+	gumshoe.getHeight = function ( elem ) {
 		return Math.max( elem.scrollHeight, elem.offsetHeight, elem.clientHeight );
 	};
 
@@ -138,7 +138,7 @@
 	 * @param  {Node} elem The element
 	 * @return {Number}    Distance from the top in pixels
 	 */
-	var getOffsetTop = function ( elem ) {
+	gumshoe.getOffsetTop = function ( elem ) {
 		var location = 0;
 		if (elem.offsetParent) {
 			do {
@@ -189,11 +189,14 @@
 	 */
 	gumshoe.setDistances = function () {
 
-		// Calculate distances
-		docHeight = getDocumentHeight(); // The document
-		headerHeight = header ? ( getHeight(header) + getOffsetTop(header) ) : 0; // The fixed header
+		// Calculate distances for:
+		// The document
+		docHeight = getDocumentHeight(); 
+		// The fixed header
+		headerHeight = header ? ( gumshoe.getHeight(header) + gumshoe.getOffsetTop(header) ) : 0;
+		// Each navigation target
 		forEach(navs, function (nav) {
-			nav.distance = getOffsetTop(nav.target); // Each navigation target
+			nav.distance = gumshoe.getOffsetTop(nav.target);
 		});
 
 		// When done, organization navigation elements
