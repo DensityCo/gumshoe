@@ -1,5 +1,5 @@
 /*!
- * gumshoe v3.1.2: A simple, framework-agnostic scrollspy script.
+ * gumshoe v3.1.5: A simple, framework-agnostic scrollspy script.
  * (c) 2016 Chris Ferdinandi
  * MIT License
  * http://github.com/cferdinandi/gumshoe
@@ -324,7 +324,7 @@
 		if ( !settings ) return;
 
 		// Remove event listeners
-		content.removeEventListener('resize', eventThrottler, false);
+		window.removeEventListener('resize', eventThrottler, false);
 		content.removeEventListener('scroll', eventThrottler, false);
 
 		// Reset variables
@@ -393,7 +393,7 @@
 		gumshoe.getCurrentNav();
 
 		// Listen for events
-		content.addEventListener('resize', eventThrottler, false);
+		window.addEventListener('resize', eventThrottler, false);
 		content.addEventListener('scroll', eventThrottler, false);
 
 	};
