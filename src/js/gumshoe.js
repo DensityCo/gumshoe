@@ -350,8 +350,15 @@
 
 				// If resize event, recalculate distances and then get currently active nav
 				if ( event.type === 'resize' ) {
-					gumshoe.setDistances();
-					gumshoe.getCurrentNav();
+
+					// Run everything again in case nav was/is hidden
+					getNavs();
+
+					if (navs.length > 0) {			
+						setInitCurrentNav();
+						gumshoe.setDistances();
+						gumshoe.getCurrentNav();
+					}
 				}
 
 			}, 66);
@@ -377,13 +384,12 @@
 		header = document.querySelector( settings.selectorHeader ); // Get fixed header
 		getNavs(); // Get navigation elements
 
-		// If no navigation elements exist, stop running gumshoe
-		if ( navs.length === 0 ) return;
-
 		// Run init methods
-		setInitCurrentNav();
-		gumshoe.setDistances();
-		gumshoe.getCurrentNav();
+		if ( navs.length > 0 ) {
+			setInitCurrentNav();
+			gumshoe.setDistances();
+			gumshoe.getCurrentNav();
+		}
 
 		// Listen for events
 		content.addEventListener('resize', eventThrottler, false);
